@@ -1,62 +1,92 @@
-# Nebula - Multi-service Music Player
+<div align="center">
+  
+# 🌌 Nebula
+
+*A stunning, multi-service desktop music player for the modern era.*
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![OS](https://img.shields.io/badge/OS-Windows%20%7C%20macOS%20%7C%20Linux-blue?style=flat-square)]()
+[![Electron](https://img.shields.io/badge/Built_with-Electron-47848f?style=flat-square&logo=electron)]()
 
 *Nebula is a customized fork of [pear-desktop](https://github.com/pear-devs/pear-desktop).*
 
-Nebula is a modern, beautiful, multi-service desktop music player built with Electron and web technologies. It seamlessly integrates your favorite streaming platforms while providing a gorgeous, distraction-free environment enhanced by custom styling, quality-of-life features, and a powerful plugin system.
+</div>
 
-## 🚀 Features
+<br/>
 
-* **Multi-Service Support**: Works with YouTube Music and Spotify (with more to come!).
-* **Stunning UI**: Custom frosted-glass titlebar, sleek dark mode aesthetics, and smooth animations that elevate the default web player experiences.
-* **Ad & Promo Blocker**: Built-in, aggressive ad and promotional content blocking, ensuring an uninterrupted listening experience.
-* **Extensible Plugin System**: Rich ecosystem of plugins to customize your player:
-  * **In-App Menu**: A beautiful, custom-built menu system integrated directly into the titlebar.
-  * **Do Not Track**: Enhanced privacy by blocking common web trackers.
-  * **SponsorBlock**: Automatically skip non-music segments in music videos (YouTube Music).
-  * **Global Shortcuts**: Control playback from anywhere on your system.
-* **Cross-Platform**: Available for Windows, macOS, and Linux.
+Nebula takes your favorite music streaming services—like **YouTube Music** and **Spotify**—and brings them out of the browser into a gorgeous, distraction-free desktop application. Featuring a sleek frosted-glass aesthetic, built-in ad blocking, and a massive library of plugins, Nebula is the ultimate way to listen.
 
-## 🛠️ Tech Stack
+<br/>
 
-* **Core**: Electron, TypeScript, Node.js
-* **Build Tool**: Vite, electron-builder
-* **UI**: HTML/CSS/JS (Renderer injections), SolidJS (for complex plugins like in-app-menu)
+## ✨ Key Features
+
+🎶 **Multi-Service Integration**  
+Seamlessly switch between YouTube Music, Spotify, and more. All your music, one beautiful interface.
+
+🎨 **Stunning Glassmorphism UI**  
+Say goodbye to boring titlebars. Nebula features a custom, macOS-style frosted glass window header that beautifully blends into the album art.
+
+🛡️ **Zero Interruptions**  
+Built-in, aggressive ad-blocking and promotional content scrubbing means you never have to hear an ad or see an "Install our App" banner again.
+
+🔌 **Massive Plugin Ecosystem**  
+Customize your experience with a powerful plugin system:
+- **SponsorBlock**: Automatically skip non-music segments in music videos.
+- **Do Not Track**: Enhanced privacy to block telemetry.
+- **Global Shortcuts**: Control your music from anywhere on your system.
+- **Discord Rich Presence**: Show off what you're listening to.
+
+<br/>
 
 ## 📦 Installation
 
-Grab the latest release for your platform from the [Releases page](https://github.com/vanguard/nebula/releases).
+Nebula is cross-platform and built for every major operating system.
 
-* **Linux**: AppImage, Flatpak, deb, rpm, snap, tar.gz
-* **Windows**: Setup executable or Portable version
-* **macOS**: DMG (x64 and Apple Silicon)
+### 🐧 Linux
+Available as an `AppImage`, `Flatpak`, `deb`, `rpm`, `snap`, and `tar.gz`.
+```bash
+# Example: Running the AppImage
+chmod +x Nebula-*-Linux.AppImage
+./Nebula-*-Linux.AppImage
+```
 
-## 💻 Development Setup
+### 🪟 Windows
+Download the `.exe` setup file or grab the portable version to run it without installing.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/vanguard/nebula.git
-   cd nebula
-   ```
+### 🍎 macOS
+Available as a `.dmg` for both Intel (x64) and Apple Silicon (arm64) Macs.
 
-2. **Install dependencies**:
-   ```bash
-   pnpm install
-   ```
+> **[🚀 Download the latest release here!](https://github.com/noaknavas/Nebula/releases)**
 
-3. **Run in development mode**:
-   ```bash
-   pnpm dev
-   ```
+<br/>
 
-4. **Build for production**:
-   ```bash
-   pnpm dist
-   # or for a specific platform:
-   # pnpm dist:linux
-   # pnpm dist:mac
-   # pnpm dist:win
-   ```
+## 🛠️ Build it Yourself
 
-## 📝 License
+Want to tinker with Nebula's code? It's easy to get started!
 
-This project is licensed under the MIT License - see the [LICENSE](license) file for details.
+**1. Clone the repository**
+```bash
+git clone https://github.com/noaknavas/Nebula.git
+cd Nebula
+```
+
+**2. Install dependencies**
+```bash
+pnpm install
+```
+
+**3. Run in development mode**
+```bash
+pnpm dev
+```
+
+**4. Build for production**
+```bash
+pnpm dist
+```
+
+<br/>
+
+## 📜 License
+
+Nebula is licensed under the [MIT License](license). Do whatever you want with it, just make it awesome.
