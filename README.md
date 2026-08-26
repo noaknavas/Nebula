@@ -1,5 +1,7 @@
 # Nebula - Multi-service Music Player
 
+*Nebula is a customized fork of [pear-desktop](https://github.com/pear-devs/pear-desktop).*
+
 Nebula is a modern, beautiful, multi-service desktop music player built with Electron and web technologies. It seamlessly integrates your favorite streaming platforms while providing a gorgeous, distraction-free environment enhanced by custom styling, quality-of-life features, and a powerful plugin system.
 
 ## 🚀 Features
