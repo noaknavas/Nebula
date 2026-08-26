@@ -7,6 +7,7 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=githubactions)]()
 [![Platform](https://img.shields.io/badge/Platform-macOS_|_Windows_|_Linux-blue?style=for-the-badge)]()
 [![Electron](https://img.shields.io/badge/Architecture-Electron_|_SolidJS-47848f?style=for-the-badge&logo=electron)]()
+[![Known Vulnerabilities](https://snyk.io/test/github/noaknavas/Nebula/badge.svg?style=for-the-badge)](https://snyk.io/test/github/noaknavas/Nebula)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)]()
 
 </div>
