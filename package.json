@@ -7,11 +7,11 @@
   "main": "./dist/main/index.js",
   "type": "module",
   "license": "MIT",
-  "repository": "vanguard/nebula",
+  "repository": "noaknavas/Nebula",
   "author": {
     "name": "vanguard",
     "email": "vanguard@example.com",
-    "url": "https://github.com/vanguard/nebula"
+    "url": "https://github.com/noaknavas/Nebula"
   },
   "scripts": {
     "postinstall": "pnpm install-electron",
