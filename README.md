@@ -73,3 +73,14 @@ $ pnpm dist
 Nebula is built upon the foundational work of the open-source community. It is a heavily customized, private-tier fork of [pear-desktop](https://github.com/pear-devs/pear-desktop).
 
 Distributed under the **MIT License**. See `license` for detailed information.
+
+## ✦ Legal Disclaimer
+
+> **No Affiliation**
+> This project and its contributors are not affiliated with, authorized by, endorsed by, or in any way officially connected with Google LLC, YouTube, Spotify AB, or any of their subsidiaries or affiliates. This is an independent, non-profit, unofficial, and open-source custom client developed to provide a native desktop experience.
+> 
+> **Trademarks**
+> The names "Google", "YouTube Music", and "Spotify", as well as related names, marks, emblems, and images, are registered trademarks of their respective owners. Any use of these trademarks is for identification and reference purposes only and does not imply any association with the trademark holder. We have no intention of infringing upon these trademarks.
+> 
+> **Limitation of Liability**
+> This software is provided "AS IS", and you use it at your own risk. In no event shall the developers or contributors be liable for any claim, damages, or other liability arising from, out of, or in connection with the software or the use of the software. The responsibility for any and all outcomes of using this software rests entirely with the user.
