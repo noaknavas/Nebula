@@ -101,13 +101,10 @@ export default createPlugin({
         const blurCanvas = document.createElement('canvas');
         blurCanvas.classList.add('html5-blur-canvas');
 
-        const context = blurCanvas.getContext('2d', {
-          willReadFrequently: true,
-        });
+        const context = blurCanvas.getContext('2d');
 
         /* effect */
         let lastEffectWorkId: number | null = null;
-        let lastImageData: ImageData | null = null;
 
         const onSync = () => {
           if (typeof lastEffectWorkId === 'number')
@@ -124,17 +121,9 @@ export default createPlugin({
             if (!Number.isFinite(height)) height = width;
             if (!height) return;
 
-            context.globalAlpha = 1;
-            if (lastImageData) {
-              const frameOffset =
-                (1 / this.buffer) * (1000 / this.interpolationTime);
-              context.globalAlpha = 1 - (frameOffset * 2); // because of alpha value must be < 1
-              context.putImageData(lastImageData, 0, 0);
-              context.globalAlpha = frameOffset;
-            }
+            const frameOffset = (1 / this.buffer) * (1000 / this.interpolationTime);
+            context.globalAlpha = Math.max(0.01, Math.min(1, frameOffset));
             context.drawImage(video, 0, 0, width, height);
-
-            lastImageData = context.getImageData(0, 0, width, height); // current image data
 
             lastEffectWorkId = null;
           });

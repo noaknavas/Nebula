@@ -537,3 +537,266 @@ const initObserver = async () => {
 };
 
 initObserver().then(preload).then(main);
+
+// ═══════════════ NEBULA CORE INJECTION ═══════════════
+const applyNebulaCore = () => {
+  const css = `
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.25); border-radius: 999px; transition: background 0.3s; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+    ::-webkit-scrollbar-corner { background: transparent; }
+    ytmusic-two-row-item-renderer { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important; border-radius: 8px; }
+    ytmusic-two-row-item-renderer:hover { transform: translateY(-4px) scale(1.02) !important; z-index: 5; }
+    ytmusic-two-row-item-renderer #thumbnail-overlay, ytmusic-two-row-item-renderer .image-wrapper img { transition: transform 0.3s !important; }
+    ytmusic-two-row-item-renderer:hover .image-wrapper img { transform: scale(1.05) !important; }
+    ytmusic-responsive-list-item-renderer { transition: background-color 0.2s ease !important; border-radius: 8px !important; }
+    ytmusic-responsive-list-item-renderer:hover { background-color: rgba(255, 255, 255, 0.05) !important; }
+    .play-pause-button, .next-button, .previous-button, .like-button-renderer { transition: transform 0.15s !important; }
+    .play-pause-button:hover, .next-button:hover, .previous-button:hover { transform: scale(1.15) !important; }
+    html, body, ytmusic-app { width: 100% !important; margin-left: 0 !important; }
+    tp-yt-app-drawer, ytmusic-mini-guide-renderer, ytmusic-guide-renderer { margin-top: var(--menu-bar-height, 0px) !important; height: calc(100vh - var(--menu-bar-height, 0px)) !important; }
+    ytmusic-app-layout > [slot='nav-bar'] { border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important; box-shadow: none !important; }
+    #nav-bar-background { background: rgba(10, 10, 15, 0.95) !important; }
+    #guide-wrapper { border-right: 1px solid rgba(255, 255, 255, 0.08) !important; }
+    
+    /* Fade out the bottom of the immersive background photo */
+    ytmusic-immersive-header-renderer #background {
+        -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    }
+    ytmusic-immersive-header-renderer .image-gradient {
+        background: linear-gradient(to bottom, transparent 0%, #000 100%) !important;
+    }
+    body:has(ytmusic-player[player-ui-state='FULLSCREEN']) #nebula-sidebar-wrapper, :fullscreen #nebula-sidebar-wrapper { display: none !important; }
+    
+    /* Spotify Layout Fixes */
+    html.spotify #main, html.spotify #root {
+        margin-top: var(--menu-bar-height, 32px) !important;
+        height: calc(100vh - var(--menu-bar-height, 32px)) !important;
+        overflow: hidden !important;
+    }
+    
+    #nebula-sidebar-wrapper {
+      position: fixed; top: var(--menu-bar-height, 32px); left: 0; width: 15px; height: calc(100vh - var(--menu-bar-height, 32px)); z-index: 99999999;
+      background: transparent;
+      transition: width 0.3s;
+    }
+    #nebula-sidebar-wrapper.open {
+      width: 70px;
+    }
+    #nebula-sidebar { 
+      position: absolute; top: 0; left: 0; width: 60px; height: 100%; 
+      background: rgba(10, 10, 15, 0.4); backdrop-filter: blur(16px); 
+      border-right: 1px solid rgba(255, 255, 255, 0.05); 
+      display: flex; flex-direction: column; align-items: center; 
+      padding-top: 20px; gap: 12px; 
+      transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #nebula-sidebar-wrapper.open #nebula-sidebar { transform: translateX(0); }
+    
+    .nebula-service-btn {
+      width: 44px; height: 44px; border-radius: 12px; margin-bottom: 12px;
+      background: rgba(255,255,255,0.05); border: none; cursor: pointer;
+      display: flex; justify-content: center; align-items: center;
+      transition: all 0.2s;
+    }
+    .nebula-service-btn:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
+    .nebula-service-btn.active { background: rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
+    .nebula-service-btn svg { width: 24px; height: 24px; fill: white; opacity: 0.7; }
+    .nebula-service-btn:hover svg, .nebula-service-btn.active svg { opacity: 1; }
+    .nebula-service-btn.ytm.active svg { fill: #ff0000; }
+    .nebula-service-btn.spotify.active svg { fill: #1db954; }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  if (window.location.hostname.includes('spotify.com')) {
+    document.documentElement.classList.add('spotify');
+    
+    // Guard against duplicate execution (applyNebulaCore can fire twice)
+    if (!document.getElementById('nebula-spotify-adblock')) {
+      const style = document.createElement('style');
+      style.id = 'nebula-spotify-adblock';
+      style.textContent = `
+        /* ══════ Premium / Upgrade upsells ══════ */
+        [data-testid="upgrade-button"],
+        [data-testid="premium-button"],
+        [data-testid="upgrade-cta"],
+        [data-testid="hpto-container"],
+        [data-testid="advertisement"],
+        [data-testid="ad-slot-container"],
+        .LeaderboardAd,
+        a[href*="/premium"],
+        a[href*="spotify.com/premium"],
+        button[aria-label*="Upgrade"],
+        button[aria-label*="upgrade"],
+        button[aria-label*="Premium"],
+        button[aria-label*="premium"],
+        .upgrade-button,
+        [class*="UpgradeButton"],
+        [class*="upgrade-button"],
+        [class*="UpgradeCTA"],
+        [class*="upgrade-cta"],
+        .premium-cta,
+        [data-encore-id="buttonPrimary"][href*="premium"],
+        .sponsor-container,
+
+        /* ══════ Download / Install app promos ══════ */
+        a[href*="/download"],
+        a[href*="spotify.com/download"],
+        a[href*="play.google.com"],
+        a[href*="apps.apple.com"],
+        button[aria-label*="Install"],
+        button[aria-label*="install"],
+        button[aria-label*="Download"],
+        button[aria-label*="download"],
+        button[aria-label*="Get the app"],
+        [data-testid="install-app-button"],
+        [data-testid="download-app-button"],
+        [data-testid="smart-banner"],
+        [data-testid="download-cta"],
+        [class*="InstallButton"],
+        [class*="install-button"],
+        [class*="DownloadButton"],
+        [class*="download-button"],
+        [class*="SmartBanner"],
+        [class*="smart-banner"],
+        [class*="AppBanner"],
+        [class*="app-banner"],
+        [class*="GetApp"],
+        [class*="get-app"],
+
+        /* ══════ Connect device bar ══════ */
+        [data-testid="connect-bar"],
+        [data-testid="device-picker-bar"],
+        [class*="ConnectBar"],
+        [class*="connect-bar"],
+
+        /* ══════ Popup notifications & modals ══════ */
+        [data-testid="promo-popup"],
+        [data-testid="notification-popup"],
+        [class*="PromoPopup"],
+        [class*="promo-popup"],
+        [class*="BottomSheet"][class*="download"],
+        [class*="BottomSheet"][class*="premium"],
+        [class*="BottomSheet"][class*="upgrade"],
+
+        /* ══════ Generic promotional containers ══════ */
+        [class*="promotional"],
+        [class*="Promotional"],
+        [data-testid*="promotional"],
+        [class*="AdsContainer"],
+        [class*="ads-container"],
+        [class*="AdSlot"],
+        [class*="ad-slot"] {
+          display: none !important;
+          visibility: hidden !important;
+          height: 0 !important;
+          max-height: 0 !important;
+          overflow: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+      `;
+      document.head.appendChild(style);
+
+      // MutationObserver: continuously nuke any dynamically injected promos
+      const promoKeywords = /download|install|upgrade|premium|get.the.app|try.free|go.premium|get.premium|open.in.app/i;
+      const nukePromos = () => {
+        // Kill any banner/popup with download/install/premium text
+        document.querySelectorAll('[role="banner"], [role="dialog"], [role="alert"], [role="alertdialog"]').forEach(el => {
+          const text = (el as HTMLElement).innerText || '';
+          if (promoKeywords.test(text) && text.length < 300) {
+            (el as HTMLElement).style.display = 'none';
+          }
+        });
+        // Kill bottom-anchored floating bars (cookie banners, download bars)
+        document.querySelectorAll('[style*="position: fixed"][style*="bottom"]').forEach(el => {
+          const text = (el as HTMLElement).innerText || '';
+          if (promoKeywords.test(text)) {
+            (el as HTMLElement).style.display = 'none';
+          }
+        });
+      };
+      // Check for dynamically injected promos every 3 seconds (lightweight)
+      setInterval(() => nukePromos(), 3000);
+      nukePromos();
+
+      let isMutedForAd = false;
+      setInterval(() => {
+        // Language-independent ad detection: check for ad DOM elements
+        // and short track duration (ads are always ≤ 30s)
+        const adElement = document.querySelector('[data-testid="advertisement"]');
+        const progressBar = document.querySelector('[data-testid="playback-progressbar"]');
+        const durationEl = document.querySelector('[data-testid="playback-duration"]');
+        const duration = durationEl?.textContent?.trim() || '';
+        
+        // Parse duration like "0:15" or "0:30" — ads are always short
+        const durationParts = duration.split(':');
+        const totalSeconds = durationParts.length === 2 
+          ? parseInt(durationParts[0]) * 60 + parseInt(durationParts[1]) 
+          : 999;
+        const isShortTrack = totalSeconds > 0 && totalSeconds <= 30;
+        
+        const isAd = !!adElement || (isShortTrack && !document.querySelector('[data-testid="nowplaying-track-link"] a'));
+        const muteBtn = document.querySelector('[data-testid="volume-bar-toggle-mute-button"]');
+        
+        if (!muteBtn) return;
+        
+        const mediaEl = document.querySelector('video, audio') as HTMLMediaElement;
+        const isCurrentlyMuted = mediaEl ? (mediaEl.muted || mediaEl.volume === 0) : muteBtn.getAttribute('aria-label')?.toLowerCase().includes('unmute');
+        
+        if (isAd && !isMutedForAd) {
+          if (!isCurrentlyMuted) (muteBtn as HTMLElement).click();
+          isMutedForAd = true;
+        } else if (!isAd && isMutedForAd) {
+          if (isCurrentlyMuted) (muteBtn as HTMLElement).click();
+          isMutedForAd = false;
+        }
+      }, 1000);
+    }
+  }
+
+  if (!document.getElementById('nebula-sidebar-wrapper')) {
+    const wrapper = document.createElement('div');
+    wrapper.id = 'nebula-sidebar-wrapper';
+    
+    const sidebar = document.createElement('div');
+    sidebar.id = 'nebula-sidebar';
+    sidebar.innerHTML = `
+      <div class="nebula-service-btn ytm active" title="YouTube Music" data-service="youtube">
+        <svg viewBox="0 0 24 24"><path d="M21.58,7.19c-0.23-0.86-0.91-1.54-1.77-1.77C18.25,5,12,5,12,5s-6.25,0-7.81,0.42 c-0.86,0.23-1.54,0.91-1.77,1.77C2,8.75,2,12,2,12s0,3.25,0.42,4.81c0.23,0.86,0.91,1.54,1.77,1.77C5.75,19,12,19,12,19 s6.25,0,7.81-0.42c0.86-0.23,1.54-0.91,1.77-1.77C22,15.25,22,12,22,12S22,8.75,21.58,7.19z M10,15.5v-7l6.5,3.5L10,15.5z"/></svg>
+      </div>
+      <div class="nebula-service-btn spotify" title="Spotify" data-service="spotify">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.6 14.4c-.2.3-.5.4-.8.2-2.1-1.3-4.8-1.6-8-.9-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3.5-.8 6.5-.4 8.9 1.1.3.2.4.5.3.8zm1.2-2.7c-.2.4-.7.5-1 .3-2.5-1.5-6.3-2-8.7-1.1-.4.1-.8-.1-1-.5-.1-.4.1-.8.5-1 2.8-1 7.1-.5 10 1.3.4.2.5.6.2 1zm.1-2.9c-3-1.8-7.9-2-10.7-1.1-.5.1-1-.2-1.1-.7-.1-.5.2-1 .7-1.1 3.2-1 8.8-.7 12.2 1.3.5.3.6.8.3 1.2-.2.5-.8.7-1.4.4z"/></svg>
+      </div>
+    `;
+    wrapper.appendChild(sidebar);
+    document.body.appendChild(wrapper);
+
+    let hoverTimeout: NodeJS.Timeout;
+    wrapper.addEventListener('mouseenter', () => {
+      clearTimeout(hoverTimeout);
+      wrapper.classList.add('open');
+    });
+    wrapper.addEventListener('mouseleave', () => {
+      hoverTimeout = setTimeout(() => {
+        wrapper.classList.remove('open');
+      }, 300); // 300ms grace period before closing
+    });
+
+    const buttons = wrapper.querySelectorAll('.nebula-service-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.ipcRenderer.send('switch-service', btn.getAttribute('data-service'));
+      });
+    });
+  }
+};
+document.addEventListener('DOMContentLoaded', applyNebulaCore);
+// In case DOM is already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') applyNebulaCore();

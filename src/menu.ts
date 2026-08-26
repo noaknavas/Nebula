@@ -43,6 +43,13 @@ const pluginEnabledMenu = async (
   checked: await config.plugins.isEnabled(plugin),
   click(item: Electron.MenuItem) {
     if (item.checked) {
+      if (plugin === 'ambient-mode') {
+        config.plugins.disable('transparent-player');
+        refreshMenu?.();
+      } else if (plugin === 'transparent-player') {
+        config.plugins.disable('ambient-mode');
+        refreshMenu?.();
+      }
       config.plugins.enable(plugin);
     } else {
       config.plugins.disable(plugin);
@@ -116,7 +123,14 @@ export const mainMenuTemplate = async (
     }),
   );
 
-  const availablePlugins = Object.keys(await allPlugins());
+  const allAvailablePlugins = Object.keys(await allPlugins());
+  const isSpotify = win.webContents.getURL().includes('spotify.com');
+  const spotifySupportedPlugins = ['in-app-menu', 'do-not-track', 'navigation', 'shortcuts'];
+  
+  const availablePlugins = isSpotify 
+    ? allAvailablePlugins.filter(p => spotifySupportedPlugins.includes(p))
+    : allAvailablePlugins;
+
   const pluginMenus = await Promise.all(
     availablePlugins
       .sort((a, b) => {

@@ -11,7 +11,7 @@ export default createPlugin({
   description: () => t('plugins.navigation.description'),
   restartNeeded: false,
   config: {
-    enabled: true,
+    enabled: false,
   },
   renderer: {
     buttonContainer: document.createElement('div'),

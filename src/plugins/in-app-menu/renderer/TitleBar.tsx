@@ -46,6 +46,8 @@ const titleStyle = cacheNoArgs(
     font-size: 12px;
     padding: 4px 4px 4px var(--offset-left, 4px);
     background-color: var(--titlebar-background-color, #030303);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     user-select: none;
 
     transition:

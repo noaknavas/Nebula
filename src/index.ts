@@ -124,19 +124,18 @@ if (is.linux()) {
 
   // https://github.com/electron/electron/issues/15947
   if (await config.plugins.isEnabled('transparent-player')) {
-    disableHardwareAcceleration = true;
     app.commandLine.appendSwitch('enable-transparent-visuals');
     app.commandLine.appendSwitch('enable-unsafe-swiftshader');
   }
 
   // Overrides WM_CLASS for X11 to correspond to icon filename
   app.setName(
-    'com.github.th-ch.\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063',
+    'com.nebula.music-player',
   );
   // for wayland
   app.commandLine.appendSwitch(
     'class',
-    'com.github.th-ch.\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063',
+    'com.nebula.music-player',
   );
 }
 
@@ -358,16 +357,20 @@ async function createMainWindow() {
     delete decorations.titleBarStyle;
   }
 
+  const isTransparent = await config.plugins.isEnabled('transparent-player');
+
   const electronWindowSettings: Electron.BrowserWindowConstructorOptions = {
     icon,
     width: windowSize.width,
     height: windowSize.height,
     minWidth: 325,
     minHeight: 425,
-    backgroundColor: '#000',
+    backgroundColor: isTransparent ? '#00000000' : '#000000',
+    transparent: isTransparent,
     show: false,
     webPreferences: {
       contextIsolation: true,
+      plugins: true, // Required for Widevine DRM (Spotify playback via Castlabs Electron)
       preload: path.join(__dirname, '..', 'preload', 'preload.cjs'),
       ...(isTesting()
         ? undefined
@@ -525,13 +528,38 @@ async function createMainWindow() {
     }
   });
 
+  win.webContents.setWindowOpenHandler((details) => {
+    try {
+      const url = new URL(details.url);
+      
+      // Allow authentication, login, and DRM popups
+      if (
+        url.hostname.includes('accounts.spotify.com') || 
+        url.hostname.includes('login.spotify.com') || 
+        url.hostname.endsWith('spclient.spotify.com') || // DRM handshake
+        url.hostname.includes('google.com') || 
+        url.hostname.includes('facebook.com') ||
+        url.hostname.includes('apple.com')
+      ) {
+        return { action: 'allow' };
+      }
+      
+      // Open all other external links in the user's default browser
+      import('electron').then(({ shell }) => shell.openExternal(details.url));
+      return { action: 'deny' };
+    } catch (err) {
+      return { action: 'deny' };
+    }
+  });
+
   win.webContents.loadURL(urlToLoad);
 
   return win;
 }
 
 app.once('browser-window-created', (_event, win) => {
-  if (config.get('options.overrideUserAgent')) {
+  // Always override UA — required for Spotify DRM compatibility
+  if (config.get('options.overrideUserAgent') || true) {
     // User agents are from https://developers.whatismybrowser.com/useragents/explore/
     const originalUserAgent = win.webContents.userAgent;
     const userAgents = {
@@ -554,6 +582,7 @@ app.once('browser-window-created', (_event, win) => {
     win.webContents.session.webRequest.onBeforeSendHeaders((details, cb) => {
       // This will only happen if login failed, and "retry" was pressed
       if (
+        !win.webContents.isDestroyed() &&
         win.webContents.getURL().startsWith('https://accounts.google.com') &&
         details.url.startsWith('https://accounts.google.com')
       ) {
@@ -674,7 +703,7 @@ app.whenReady().then(async () => {
   // Register appID on windows
   if (is.windows()) {
     const appID =
-      'com.github.th-ch.\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063';
+      'com.nebula.music-player';
     app.setAppUserModelId(appID);
     const appLocation = process.execPath;
     const appData = app.getPath('appData');
@@ -716,6 +745,18 @@ app.whenReady().then(async () => {
       }
     }
   }
+
+  ipcMain.on('switch-service', async (event, service) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return;
+    if (service === 'spotify') {
+      await win.loadURL('https://open.spotify.com');
+    } else if (service === 'youtube') {
+      await win.loadURL('https://music.youtube.com');
+    }
+    const { refreshMenu } = await import('@/menu');
+    await refreshMenu(win);
+  });
 
   ipcMain.on('get-renderer-script', (event) => {
     // Inject index.html file as string using insertAdjacentHTML

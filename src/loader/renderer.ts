@@ -114,11 +114,16 @@ export const forceLoadRendererPlugin = async (id: string) => {
 
 export const loadAllRendererPlugins = async () => {
   const pluginConfigs = window.mainConfig.plugins.getPlugins();
+  const isSpotify = window.location.hostname.includes('spotify.com');
+  const spotifySupportedPlugins = ['in-app-menu', 'do-not-track', 'navigation', 'shortcuts'];
 
   for (const [pluginId, pluginDef] of Object.entries(await rendererPlugins())) {
     const config = deepmerge(pluginDef.config, pluginConfigs[pluginId] ?? {});
 
-    if (config.enabled) {
+    // If on Spotify, forcefully disable unsupported plugins
+    const shouldEnable = config.enabled && (!isSpotify || spotifySupportedPlugins.includes(pluginId));
+
+    if (shouldEnable) {
       await forceLoadRendererPlugin(pluginId);
     } else {
       if (loadedPluginMap[pluginId]) {

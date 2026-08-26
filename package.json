@@ -1,18 +1,17 @@
 {
-
-  "name": "\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063",
-  "desktopName": "com.github.th-ch.\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063",
-  "productName": "\u0059\u006f\u0075\u0054\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063",
+  "name": "youtube-music",
+  "desktopName": "com.nebula.music-player",
+  "productName": "Nebula",
   "version": "3.12.0",
-  "description": "\u0059\u006f\u0075\u0054\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063 Desktop App - including custom plugins",
+  "description": "Nebula - Multi-service Music Player",
   "main": "./dist/main/index.js",
   "type": "module",
   "license": "MIT",
-  "repository": "pear-devs/pear-desktop",
+  "repository": "vanguard/nebula",
   "author": {
-    "name": "th-ch",
-    "email": "th-ch@users.noreply.github.com",
-    "url": "https://github.com/pear-devs/pear-desktop"
+    "name": "vanguard",
+    "email": "vanguard@example.com",
+    "url": "https://github.com/vanguard/nebula"
   },
   "scripts": {
     "postinstall": "pnpm install-electron",
@@ -43,10 +42,6 @@
     "release:win": "pnpm clean && pnpm build && pnpm electron-builder --win -p always",
     "typecheck": "pnpm tsc -p tsconfig.json --noEmit",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck"
-  },
-  "engines": {
-    "node": ">=22",
-    "pnpm": ">=11"
   },
   "dependencies": {
     "@dehoist/romanize-thai": "1.0.0",
@@ -137,7 +132,7 @@
     "cross-env": "10.1.0",
     "del-cli": "7.0.0",
     "discord-api-types": "0.38.49",
-    "electron": "42.5.0",
+    "electron": "42.8.0",
     "electron-builder": "26.15.3",
     "electron-builder-squirrel-windows": "26.15.3",
     "electron-devtools-installer": "4.0.0",

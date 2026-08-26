@@ -82,14 +82,18 @@ export const forceLoadPreloadPlugin = async (id: string) => {
 
 export const loadAllPreloadPlugins = async () => {
   const pluginConfigs = config.plugins.getPlugins();
+  const isSpotify = window.location.hostname.includes('spotify.com');
+  const spotifySupportedPlugins = ['in-app-menu', 'do-not-track', 'navigation', 'shortcuts'];
 
   for (const [pluginId, pluginDef] of Object.entries(await preloadPlugins())) {
-    const config = deepmerge(
+    const configData = deepmerge(
       pluginDef.config ?? { enable: false },
       pluginConfigs[pluginId] ?? {},
     );
 
-    if (config.enabled) {
+    const shouldEnable = configData.enabled && (!isSpotify || spotifySupportedPlugins.includes(pluginId));
+
+    if (shouldEnable) {
       forceLoadPreloadPlugin(pluginId);
     } else {
       if (loadedPluginMap[pluginId]) {

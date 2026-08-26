@@ -1,12 +1,12 @@
 :root {
-  --titlebar-background-color: var(--ytmusic-color-black3);
+  --titlebar-background-color: rgba(10, 10, 15, 0.85);
   --menu-bar-height: 32px;
 }
 
 /* original style */
 ytmusic-app-layout {
   overflow: auto scroll;
-  height: calc(100vh - var(--menu-bar-height, 36px));
+  height: calc(100vh - var(--menu-bar-height, 32px));
 
   /* fixes laggy list scrolling in large playlists */
   backface-visibility: hidden;
@@ -15,7 +15,7 @@ ytmusic-app-layout#layout {
   --ytmusic-nav-bar-offset: 0px;
 }
 ytmusic-app-layout > #content {
-  padding-top: var(--menu-bar-height, 36px);
+  padding-top: var(--menu-bar-height, 32px);
 }
 
 ytmusic-app-layout::-webkit-scrollbar {
@@ -27,27 +27,27 @@ ytmusic-app-layout::-webkit-scrollbar-thumb {
 
 ytmusic-app-layout > [slot='nav-bar'],
 #nav-bar-background.ytmusic-app-layout {
-  top: var(--menu-bar-height, 36px) !important;
+  top: var(--menu-bar-height, 32px) !important;
 }
 #nav-bar-divider.ytmusic-app-layout {
   top: calc(
-    var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 36px)
+    var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 32px)
   ) !important;
 }
 ytmusic-app[is-bauhaus-sidenav-enabled] #guide-spacer.ytmusic-app,
 ytmusic-app[is-bauhaus-sidenav-enabled] #mini-guide-spacer.ytmusic-app {
   margin-top: calc(
-    var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 36px)
+    var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 32px)
   ) !important;
 }
 
 @media (max-width: 935px) {
   ytmusic-app[is-bauhaus-sidenav-enabled] #guide-spacer.ytmusic-app {
-    margin-top: calc(var(--menu-bar-height, 36px)) !important;
+    margin-top: calc(var(--menu-bar-height, 32px)) !important;
   }
   ytmusic-app[is-bauhaus-sidenav-enabled] #mini-guide-spacer.ytmusic-app {
     margin-top: calc(
-      var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 36px)
+      var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 32px)
     ) !important;
   }
 }
@@ -81,7 +81,7 @@ ytmusic-app-layout
   );
 }
 
-/* ytm-bugs: see https://github.com/pear-devs/pear-desktop/issues/1737 */
+/* ytm-bugs: see https://github.com/vanguard/nebula/issues/1737 */
 html {
   scrollbar-color: unset;
 }

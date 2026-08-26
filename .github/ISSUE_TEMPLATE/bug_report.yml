@@ -10,9 +10,9 @@ body:
     options:
       - label: I use the latest version of Pear Desktop (Application).
         required: true
-      - label: I have searched the [issue tracker](https://github.com/pear-devs/pear-desktop/issues) for a bug report that matches the one I want to file, without success.
+      - label: I have searched the [issue tracker](https://github.com/vanguard/nebula/issues) for a bug report that matches the one I want to file, without success.
         required: true
-      - label: I understand that **pear-devs/pear-desktop has NO affiliation with Google or YouTube**
+      - label: I understand that **vanguard/nebula has NO affiliation with Google or YouTube**
         required: true
 - type: input
   id: app-version
