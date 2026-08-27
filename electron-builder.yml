@@ -120,3 +120,7 @@ snap:
         interface: mpris
 directories:
   output: ./pack/
+publish:
+  provider: github
+  owner: noaknavas
+  repo: Nebula
