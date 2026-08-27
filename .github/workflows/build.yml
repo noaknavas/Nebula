@@ -105,7 +105,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     name: Release Pear Desktop
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/nebula'
     needs: build
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -166,7 +166,7 @@ jobs:
           name: ${{ env.VERSION_TAG }}
           replacebody: true
           body: |
-            See [changelog](https://github.com/noaknavas/Nebula/blob/master/changelog.md#${{ env.CHANGELOG_ANCHOR }}) for the list of updates and the full diff.
+            See [changelog](https://github.com/noaknavas/Nebula/blob/nebula/changelog.md#${{ env.CHANGELOG_ANCHOR }}) for the list of updates and the full diff.
 
             Thanks to all contributors! 🏅
 
