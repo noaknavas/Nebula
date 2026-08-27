@@ -65,7 +65,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo snap install snapcraft --classic
           sudo apt update
           pnpm release:linux
 
