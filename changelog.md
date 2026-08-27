@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
-#### [v4.0.0](https://github.com/noaknavas/Nebula/compare/v3.12.0...v4.0.0)
+#### [v4.0.6](https://github.com/noaknavas/Nebula/compare/v4.0.0...v4.0.6)
+
+- Update changelog for v4.0.0 [`ea6dba1`](https://github.com/noaknavas/Nebula/commit/ea6dba1e05821492653820a0676c4e8e13af2652)
+- ci: remove flatpak installation from workflow to fix fuse mount errors [`d33beec`](https://github.com/noaknavas/Nebula/commit/d33beece43fc5a22d8e0075b77bca2a7acc1c82b)
+- ci: disable snap, freebsd, and tar.gz builds to fix build environment issues [`2ccb75e`](https://github.com/noaknavas/Nebula/commit/2ccb75e4ee6b00ec87705e6749195415ff1c152b)
+
+### [v4.0.0](https://github.com/noaknavas/Nebula/compare/v3.12.0...v4.0.0)
+
+> 27 August 2026
 
 - [Snyk] Fix for 6 vulnerabilities [`#1`](https://github.com/noaknavas/Nebula/pull/1)
 - chore: initial Nebula sanitization and rebranding [`00feb05`](https://github.com/noaknavas/Nebula/commit/00feb05d75f25cc71b6e73db05024674b58b0917)
