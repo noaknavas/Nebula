@@ -2,7 +2,7 @@
   "name": "nebula",
   "desktopName": "com.nebula.music-player",
   "productName": "Nebula",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Nebula - Multi-service Music Player",
   "main": "./dist/main/index.js",
   "type": "module",
