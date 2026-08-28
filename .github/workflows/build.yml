@@ -64,6 +64,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu') && (github.event_name != 'pull_request')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPIMAGE_EXTRACT_AND_RUN: 1
         run: |
           sudo apt update
           pnpm release:linux
