@@ -18,6 +18,7 @@ import {
   dialog,
   ipcMain,
   protocol,
+  components,
   type BrowserWindowConstructorOptions,
 } from 'electron';
 import electronDebug from 'electron-debug';
@@ -541,7 +542,13 @@ async function createMainWindow() {
         url.hostname.includes('facebook.com') ||
         url.hostname.includes('apple.com')
       ) {
-        return { action: 'allow' };
+        return { 
+          action: 'allow',
+          overrideBrowserWindowOptions: {
+            frame: true,
+            autoHideMenuBar: false,
+          }
+        };
       }
       
       // Open all other external links in the user's default browser
@@ -673,6 +680,8 @@ const getDefaultLocale = async (locale: string) =>
   Object.keys(await languageResources()).includes(locale) ? locale : null;
 
 app.whenReady().then(async () => {
+  await components.whenReady();
+  console.log(LoggerPrefix, 'Components ready (Widevine CDM)');
   if (!config.get('options.language')) {
     const locale = await getDefaultLocale(app.getLocale());
     if (locale) {

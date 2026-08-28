@@ -1,0 +1,11 @@
+      - name: VirusTotal Scan
+        uses: crazy-max/ghaction-virustotal@v4
+        if: env.VT_API_KEY != ''
+        env:
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        with:
+          vt_api_key: ${{ secrets.VT_API_KEY }}
+          files: |
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.dmg
